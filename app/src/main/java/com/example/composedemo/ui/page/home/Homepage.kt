@@ -41,6 +41,7 @@ fun HomePage(
         content = {
             Column {
                 searchBar()
+
                 val titles = mutableListOf(" 首页", "广场", "知识体系", "导航", "公众号", "项目", "问答")
                 val pagerState = rememberPagerState(pageCount = titles.size)
                 TopTapBar(
