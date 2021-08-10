@@ -25,9 +25,12 @@ import com.example.composedemo.theme.green3
 import com.example.composedemo.theme.white1
 import com.example.composedemo.R
 import com.example.composedemo.ui.RouteActions
+import com.example.composedemo.ui.page.index.IndexPage
 import com.example.composedemo.widget.TopTapBar
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -43,12 +46,24 @@ fun HomePage(
                 searchBar()
 
                 val titles = mutableListOf(" 首页", "广场", "知识体系", "导航", "公众号", "项目", "问答")
-                val pagerState = rememberPagerState(pageCount = titles.size)
+                val pagerState = rememberPagerState(titles.size, homeIndex)
+                val scopeState = rememberCoroutineScope()
                 TopTapBar(
                     index = pagerState.currentPage,
                     tabTexts = titles,
-                ) {index ->  
+                ) { index ->
+                    scopeState.launch {
+                        pagerState.scrollToPage(index)
+                    }
 
+                }
+                HorizontalPager(state = pagerState) { page ->
+                    //LogUtils.e("当前HomeIndex = ${pagerState.currentPage}")
+                    onPageSelected(pagerState.currentPage)
+                    when (page) {
+                        0->{ IndexPage(onSelected = actions.selected)}
+
+                    }
                 }
             }
         }
@@ -57,19 +72,17 @@ fun HomePage(
 }
 
 
-
-
 @Composable
 fun searchBar() {
     Row(
         modifier = Modifier
-            .fillMaxHeight()
+            .fillMaxWidth()
             .height(40.dp)
             .background(HamTheme.colors.themeUi)
     ) {
         Row(
             modifier = Modifier
-                .padding(20.dp)
+                .padding(horizontal = 20.dp)
                 .height(25.dp)
                 .align(alignment = Alignment.Top)
                 .weight(1f)
