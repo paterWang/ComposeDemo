@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.example.composedemo.theme.HamTheme
 import com.example.composedemo.ui.page.home.HomePage
+import com.example.composedemo.ui.page.webview.WebViewPage
 import com.example.composedemo.util.Navigator
 import com.google.accompanist.pager.ExperimentalPagerApi
 
@@ -27,6 +28,7 @@ fun HomeEntry(backDispatcher: OnBackPressedDispatcher) {
         Crossfade(navigator.current) { destination ->
             when (destination) {
                 Destination.Home -> HomePage(homeIndex,{homeIndex =it},actions)
+                is Destination.WebView -> WebViewPage(destination.webData,actions.backpass)
 //                Destination.ArticleSearch -> SearchPage(actions)
             }
         }
